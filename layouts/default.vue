@@ -1,7 +1,9 @@
 <template>
   <el-container style="max-width: 1024px; margin: auto;">
     <el-header style="height: auto; text-align: center; padding: 1em;">
-      <el-image :src="require('~/assets/logo.png')" fit="contain" />
+      <nuxt-link to="/">
+        <el-image :src="require('~/assets/logo.png')" fit="contain" />
+      </nuxt-link>
     </el-header>
     <el-main>
       <nuxt />

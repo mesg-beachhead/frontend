@@ -24,28 +24,28 @@ const data = new Array(10).fill(null).map((x, i) => ({
 }))
 
 export const state = () => ({
-  items: {}
+  list: {}
 })
 
 export const mutations = {
-  insert: (state, offer) => {
-    state.items = {
-      ...state.items,
+  add: (state, offer) => {
+    state.list = {
+      ...state.list,
       [offer.id]: offer
     }
   }
 }
 
 export const getters = {
-  items: (state) => state.items
+  list: (state) => state.list
 }
 
 export const actions = {
   fetch: ({ commit }) => {
-    data.forEach((x) => commit('insert', x))
+    data.forEach((x) => commit('add', x))
   },
   fetchItem: ({ commit }, { id }) => {
     const item = data.find((x) => parseInt(x.id, 10) === parseInt(id, 10))
-    commit('insert', item)
+    commit('add', item)
   }
 }

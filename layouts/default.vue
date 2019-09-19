@@ -5,6 +5,16 @@
         <el-image :src="require('~/assets/logo.png')" fit="contain" />
       </nuxt-link>
     </el-header>
+    <el-alert
+      v-for="transaction in transactions"
+      :key="transaction.id"
+      type="info"
+    >
+      Transaction in progress.
+      <a :href="`https://etherscan.com/tx/${transaction.hash}`" target="_blank"
+        >Check the progress</a
+      >
+    </el-alert>
     <el-main>
       <nuxt />
     </el-main>
@@ -12,7 +22,12 @@
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+export default {
+  computed: mapGetters({
+    transactions: 'transaction/list'
+  })
+}
 </script>
 
 <style>

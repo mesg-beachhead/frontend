@@ -24,7 +24,7 @@ export default {
   },
   fetch: ({ store }) => store.dispatch('offer/fetch'),
   computed: mapGetters({
-    offers: 'offer/items'
+    offers: 'offer/list'
   })
 }
 </script>

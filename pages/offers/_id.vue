@@ -10,7 +10,7 @@
       Price: {{ offer.price }} {{ offer.currency }}
       <trait :offer="offer" type="dimension" />
       <trait :offer="offer" type="location" />
-      <el-button type="primary" size="medium">Buy now</el-button>
+      <purchase-button :offer="offer" />
     </el-aside>
   </el-container>
 </template>
@@ -18,13 +18,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import Trait from '~/components/traits'
+import PurchaseButton from '~/components/offer/PurchaseButton'
 export default {
   components: {
-    Trait
+    Trait,
+    PurchaseButton
   },
   computed: {
     ...mapGetters({
-      offers: 'offer/items'
+      offers: 'offer/list'
     }),
     offer() {
       return this.offers[this.$route.params.id]

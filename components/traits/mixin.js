@@ -5,7 +5,6 @@ export default {
       required: true
     },
     value: {
-      type: Array,
       required: true
     },
     unit: {

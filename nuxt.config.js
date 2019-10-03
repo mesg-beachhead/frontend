@@ -1,5 +1,6 @@
 export default {
-  mode: 'universal',
+  // mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -38,7 +39,9 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa'],
+  modules: [
+    // '@nuxtjs/pwa'
+  ],
   /*
    ** Build configuration
    */

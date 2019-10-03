@@ -2,11 +2,11 @@
   <el-container>
     <el-row :gutter="12">
       <el-col
+        v-for="offer in offers"
+        :key="offer.id"
         :xs="24"
         :sm="12"
         :md="6"
-        v-for="offer in offers"
-        :key="offer.id"
         style="margin-bottom: 1em;"
       >
         <offer-thumb :offer="offer" />
@@ -22,9 +22,11 @@ export default {
   components: {
     OfferThumb
   },
-  fetch: ({ store }) => store.dispatch('offer/fetch'),
   computed: mapGetters({
     offers: 'offer/list'
-  })
+  }),
+  fetch: async ({ store }) => {
+    await store.dispatch('offer/fetch')
+  }
 }
 </script>

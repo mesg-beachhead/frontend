@@ -23,6 +23,7 @@
     "@nuxtjs/pwa": "^3.0.0-0",
     "element-ui": "^2.4.11",
     "ethers": "^4.0.37",
+    "ipfs-http-client": "^38.0.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {

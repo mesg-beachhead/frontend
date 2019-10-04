@@ -15,7 +15,7 @@
         <el-input v-model="item.description" />
       </el-form-item>
       <el-form-item label="Image">
-        <input @change="(e) => fileChanged(e, 'image')" type="file" />
+        <input type="file" @change="(e) => fileChanged(e, 'image')" />
       </el-form-item>
       <el-form-item label="Price">
         <el-col :span="20">
@@ -24,8 +24,10 @@
         <el-col :span="4">
           <el-select v-model="offer.currency">
             <el-option
-              label="BHD"
-              value="0x51c683a707D6EE96369bdF89AE96181773e40c07"
+              v-for="(key, value) in currencies"
+              :key="key"
+              :label="key"
+              :value="value"
             ></el-option>
           </el-select>
         </el-col>
@@ -51,19 +53,18 @@ export default {
       offer: {
         price: 0,
         currency: null
-      },
-      tokenId: null
+      }
     }
   },
   computed: mapGetters({
     erc721Store: 'erc721/address',
-    currency: 'erc20/address'
+    currencies: 'currency/list'
   }),
   async mounted() {
     this.allowed = await this.isMinter([
       window.web3.currentProvider.selectedAddress
     ])
-    this.offer.currency = this.currency
+    this.offer.currency = Object.keys(this.currencies)[0]
   },
   methods: {
     ...mapActions({
@@ -73,7 +74,6 @@ export default {
     }),
     async submit() {
       const tokenId = await this.createToken(this.item)
-      debugger
       const offer = await this.createOffer({
         store: this.erc721Store,
         tokenId,

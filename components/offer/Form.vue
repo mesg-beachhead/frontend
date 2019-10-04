@@ -15,7 +15,7 @@
         <el-input v-model="item.description" />
       </el-form-item>
       <el-form-item label="Image">
-        <el-input v-model="item.picture" type="file" />
+        <input @change="(e) => fileChanged(e, 'image')" type="file" />
       </el-form-item>
       <el-form-item label="Price">
         <el-col :span="20">
@@ -46,7 +46,7 @@ export default {
       item: {
         name: null,
         description: null,
-        picture: null
+        image: null
       },
       offer: {
         price: 0,
@@ -69,16 +69,21 @@ export default {
     ...mapActions({
       createToken: 'erc721/create',
       isMinter: 'erc721/isMinter',
-      createOffer: 'marketplace/createOffer'
+      createOffer: 'marketplace/create'
     }),
     async submit() {
+      const tokenId = await this.createToken(this.item)
+      debugger
       const offer = await this.createOffer({
         store: this.erc721Store,
-        tokenId: await this.createToken(this.item),
+        tokenId,
         currency: this.offer.currency,
         price: this.offer.price
       })
       return offer
+    },
+    fileChanged(event, value) {
+      this.item[value] = event.srcElement.files[0]
     }
   }
 }

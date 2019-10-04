@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>Create a new offer</span>
+      <span>Create a new item with an offer</span>
     </div>
     <OfferForm />
   </el-card>

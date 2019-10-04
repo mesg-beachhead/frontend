@@ -31,14 +31,14 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">Publish</el-button>
+        <el-button type="primary" @click="submit">Create Offer</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -50,35 +50,35 @@ export default {
       },
       offer: {
         price: 0,
-        currency: 'BHD'
-      }
+        currency: null
+      },
+      tokenId: null
     }
   },
+  computed: mapGetters({
+    erc721Store: 'erc721/address',
+    currency: 'erc20/address'
+  }),
   async mounted() {
     this.allowed = await this.isMinter([
       window.web3.currentProvider.selectedAddress
     ])
+    this.offer.currency = this.currency
   },
   methods: {
     ...mapActions({
-      createItem: 'erc721/mintWithTokenURI',
+      createToken: 'erc721/create',
       isMinter: 'erc721/isMinter',
       createOffer: 'marketplace/createOffer'
     }),
     async submit() {
-      const item = await this.createItem([
-        '0x0000000000000000000000000000000000000001', // to
-        0, // tokenId
-        'ipfs://xxxxxx' // tokenURI
-      ])
-      console.log(item)
-      const offer = await this.createOffer([
-        '0xc58d3e5A609BdeCD913cEf6996CDd8355bdE933c', // store
-        0, // tokenId
-        this.offer.currency, // currency
-        this.offer.price // price
-      ])
-      console.log(offer)
+      const offer = await this.createOffer({
+        store: this.erc721Store,
+        tokenId: await this.createToken(this.item),
+        currency: this.offer.currency,
+        price: this.offer.price
+      })
+      return offer
     }
   }
 }

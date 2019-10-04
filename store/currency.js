@@ -1,6 +1,6 @@
 export const state = () => ({
   list: {
-    '0x51c683a707D6EE96369bdF89AE96181773e40c07': 'BHD'
+    '0xcBd047839667b4e0fd8E7EB837C2ad5e357491Cc': 'BHD'
   }
 })
 

@@ -1,7 +1,7 @@
 import contractStore from '../lib/contractStore'
 
 const contract = contractStore(
-  '0xDcbA375C9ACaa1961F2Ca19d801f749250384e1B',
+  '0x92b6c9beDecBEde62C30B531424B784f5eF68c1a',
   require('./marketplace.abi.json')
 )
 

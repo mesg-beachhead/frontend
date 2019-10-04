@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <el-main>
+      <img :src="offer.item.image" />
       <trait :offer="offer" type="images" />
       <h2>Description</h2>
       <p>{{ offer.item.description }}</p>

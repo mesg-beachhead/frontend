@@ -20,7 +20,7 @@ export const actions = {
     const count = await dispatch('marketplace/numberOfOffers', null, {
       root: true
     })
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count.toNumber(); i++) {
       const tokenId = await dispatch('marketplace/offerIds', [i], {
         root: true
       })

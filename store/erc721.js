@@ -5,7 +5,7 @@ const client = ipfs('ipfs.app.mesg.com', '5001', { protocol: 'http' })
 const ipfsPath = (hash) => `http://ipfs.app.mesg.com:8080/ipfs/${hash}`
 
 const contract = contractStore(
-  '0x92b6c9beDecBEde62C30B531424B784f5eF68c1a',
+  '0xb34EEE566C59506F26c1E73F4EcAb3f0fCD178Fd',
   require('./erc721.abi.json')
 )
 

@@ -32,6 +32,9 @@ export const actions = {
     const tokenURI = await dispatch('erc721/tokenURI', [offer.tokenId], {
       root: true
     })
+    const owner = await dispatch('erc721/ownerOf', [offer.tokenId], {
+      root: true
+    })
     let item = {}
     if (tokenURI.startsWith('http')) {
       const resp = await fetch(tokenURI)
@@ -40,7 +43,10 @@ export const actions = {
     commit('add', {
       ...offer,
       id: offer.id.toHexString(),
-      item
+      item: {
+        ...item,
+        owner
+      }
     })
   }
 }

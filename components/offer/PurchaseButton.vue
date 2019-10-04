@@ -25,7 +25,7 @@ export default {
     }
   },
   methods: mapActions({
-    purchase: 'transaction/create'
+    purchase: 'marketplace/purchase'
   })
 }
 </script>

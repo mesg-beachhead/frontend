@@ -27,6 +27,14 @@ export default {
         .args.id.toHexString()
       await dispatch('offer/fetchItem', id, { root: true })
       return id
+    },
+    purchase: async ({ dispatch, getters }, { id, price }) => {
+      await dispatch('erc20/approve', [getters.address, price], {
+        root: true
+      })
+      await dispatch('purchaseOffer', [id])
+      await dispatch('offer/fetchItem', id, { root: true })
+      return id
     }
   }
 }

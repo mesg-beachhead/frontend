@@ -28,7 +28,9 @@ export default {
   },
   computed: {
     traits() {
-      return this.offer.item.attributes.filter((x) => x.traitType === this.type)
+      return (this.offer.item.attributes || []).filter(
+        (x) => x.traitType === this.type
+      )
     },
     component() {
       return {

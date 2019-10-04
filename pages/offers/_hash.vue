@@ -29,9 +29,9 @@ export default {
       offers: 'offer/list'
     }),
     offer() {
-      return this.offers[this.$route.params.id]
+      return this.offers[this.$route.params.hash]
     }
   },
-  fetch: ({ store, params }) => store.dispatch('offer/fetchItem', params)
+  fetch: ({ store, params }) => store.dispatch('offer/fetchItem', params.hash)
 }
 </script>

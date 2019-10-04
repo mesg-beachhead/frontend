@@ -2,8 +2,8 @@
   <el-container>
     <el-row :gutter="12">
       <el-col
-        v-for="offer in offers"
-        :key="offer.id"
+        v-for="(offer, i) in offers"
+        :key="i"
         :xs="24"
         :sm="12"
         :md="6"
@@ -26,7 +26,7 @@ export default {
     offers: 'offer/list'
   }),
   fetch: async ({ store }) => {
-    await store.dispatch('offer/fetch')
+    await store.dispatch('offer/fetchAll')
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <trait :offer="offer" type="pictures" />
+      <trait :offer="offer" type="images" />
       <h2>Description</h2>
       <p>{{ offer.item.description }}</p>
     </el-main>

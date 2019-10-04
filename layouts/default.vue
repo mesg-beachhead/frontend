@@ -24,9 +24,16 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  computed: mapGetters({
-    transactions: 'transaction/list'
-  })
+  computed: {
+    ...mapGetters({
+      erc721: 'erc721/transactions',
+      erc20: 'erc20/transactions',
+      marketplace: 'marketplace/transactions'
+    }),
+    transactions() {
+      return [...this.erc721, ...this.erc20, ...this.marketplace]
+    }
+  }
 }
 </script>
 

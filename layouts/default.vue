@@ -10,7 +10,7 @@
       :key="transaction.id"
       type="info"
     >
-      Transaction in progress.
+      Transaction {{ transaction.hash }} in progress.
       <a :href="`https://etherscan.com/tx/${transaction.hash}`" target="_blank"
         >Check the progress</a
       >

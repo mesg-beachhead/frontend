@@ -2,7 +2,7 @@ import ipfs from 'ipfs-http-client'
 import contractStore from '../lib/contractStore'
 
 const client = ipfs('ipfs.app.mesg.com', '5001', { protocol: 'http' })
-const ipfsPath = (hash) => `https://ipfs.infura.io/ipfs/${hash}`
+const ipfsPath = (hash) => `http://ipfs.app.mesg.com:8080/ipfs/${hash}`
 
 const contract = contractStore(
   '0xc58d3e5A609BdeCD913cEf6996CDd8355bdE933c',

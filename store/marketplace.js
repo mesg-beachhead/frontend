@@ -16,13 +16,17 @@ export default {
       await dispatch('erc721/approve', [getters.address, tokenId], {
         root: true
       })
-      const offer = await dispatch('createOffer', [
+      const tx = await dispatch('createOffer', [
         store,
         tokenId,
         currency,
         parseInt(price, 10)
       ])
-      return offer
+      const id = tx.events
+        .find((x) => x.event === 'OfferCreated')
+        .args.id.toHexString()
+      await dispatch('offer/fetchItem', id, { root: true })
+      return id
     }
   }
 }

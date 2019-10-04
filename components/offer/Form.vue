@@ -7,7 +7,12 @@
       description="Please switch to an account with the authotization to create a new offer."
       show-icon
     />
-    <el-form :model="item" label-position="left" label-width="100px">
+    <el-form
+      v-loading="submitting"
+      :model="item"
+      label-position="left"
+      label-width="100px"
+    >
       <el-form-item label="Name">
         <el-input v-model="item.name" />
       </el-form-item>
@@ -45,6 +50,7 @@ export default {
   data() {
     return {
       allowed: true,
+      submitting: false,
       item: {
         name: null,
         description: null,
@@ -73,14 +79,16 @@ export default {
       createOffer: 'marketplace/create'
     }),
     async submit() {
+      this.submitting = true
       const tokenId = await this.createToken(this.item)
-      const offer = await this.createOffer({
+      const id = await this.createOffer({
         store: this.erc721Store,
         tokenId,
         currency: this.offer.currency,
         price: this.offer.price
       })
-      return offer
+      this.submitting = false
+      this.$nuxt.$router.push(`/offers/${id}`)
     },
     fileChanged(event, value) {
       this.item[value] = event.srcElement.files[0]

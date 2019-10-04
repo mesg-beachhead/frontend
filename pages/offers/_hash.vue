@@ -7,7 +7,7 @@
     </el-main>
     <el-aside width="300px">
       <h1>{{ offer.item.name }}</h1>
-      Price: {{ offer.price }} {{ offer.currency }}
+      Price: {{ offer.price }} {{ currency }}
       <trait :offer="offer" type="dimension" />
       <trait :offer="offer" type="location" />
       <purchase-button :offer="offer" />
@@ -26,10 +26,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      offers: 'offer/list'
+      offers: 'offer/list',
+      currencies: 'currency/list'
     }),
     offer() {
       return this.offers[this.$route.params.hash]
+    },
+    currency() {
+      if (!this.offer) return null
+      return this.currencies[this.offer.currency]
     }
   },
   fetch: ({ store, params }) => store.dispatch('offer/fetchItem', params.hash)

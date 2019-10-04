@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   props: {
     offer: {
@@ -14,8 +14,14 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currencies: 'currency/list'
+    }),
+    currency() {
+      return this.currencies[this.offer.currency]
+    },
     priceLabel() {
-      return [this.offer.price, this.offer.currency].join(' ')
+      return [this.offer.price, this.currency].join(' ')
     }
   },
   methods: mapActions({

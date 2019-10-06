@@ -1,6 +1,8 @@
+import config from './config'
+
 export const state = () => ({
   list: {
-    '0xcBd047839667b4e0fd8E7EB837C2ad5e357491Cc': 'BHD'
+    [config.contracts.erc20]: 'BHD'
   }
 })
 

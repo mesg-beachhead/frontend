@@ -1,11 +1,12 @@
 import ipfs from 'ipfs-http-client'
 import contractStore from '../lib/contractStore'
+import config from './config'
 
-const client = ipfs('ipfs.app.mesg.com', '5001', { protocol: 'http' })
-const ipfsPath = (hash) => `http://ipfs.app.mesg.com:8080/ipfs/${hash}`
+const client = ipfs(config.ipfs.endpoint, '5001', { protocol: 'http' })
+const ipfsPath = (hash) => `${config.ipfs.gateway}/ipfs/${hash}`
 
 const contract = contractStore(
-  '0xb34EEE566C59506F26c1E73F4EcAb3f0fCD178Fd',
+  config.contracts.erc721,
   require('./erc721.abi.json')
 )
 

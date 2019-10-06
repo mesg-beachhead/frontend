@@ -1,7 +1,8 @@
 import contractStore from '../lib/contractStore'
+import config from './config'
 
 const contract = contractStore(
-  '0x92b6c9beDecBEde62C30B531424B784f5eF68c1a',
+  config.contracts.marketplace,
   require('./marketplace.abi.json')
 )
 

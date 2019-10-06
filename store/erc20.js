@@ -1,6 +1,7 @@
 import contractStore from '../lib/contractStore'
+import config from './config'
 
 export default contractStore(
-  '0xcBd047839667b4e0fd8E7EB837C2ad5e357491Cc',
+  config.contracts.erc20,
   require('./erc20.abi.json')
 )

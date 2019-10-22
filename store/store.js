@@ -7,16 +7,21 @@ const ipfsPath = (hash) => `http://localhost:8080/ipfs/${hash}`
 
 export const state = () => ({
   list: {},
+  addresses: [],
   items: {}
 })
 
 export const getters = {
   list: (state) => state.list,
+  addresses: (state) => state.addresses,
   items: (state) => state.items
 }
 
 export const mutations = {
-  insert: (state, store) => (state.list[store.address] = store),
+  insert: (state, store) => {
+    state.addresses = [...state.addresses, store.address]
+    state.list[store.address] = store
+  },
   insertItem: (state, item) => (state.items[`${item.store}-${item.id}`] = item)
 }
 

@@ -1,32 +1,38 @@
 <template>
   <v-card>
-    <v-row>
-      <v-col :cols="3">
-        <v-img :src="item.data.image" />
-      </v-col>
-      <v-col :cols="9">
-        <h1>{{ item.data.name }}</h1>
-        <p>{{ item.data.description }}</p>
-        <v-list two-line>
-          <v-list-item
-            v-for="(info, i) in informations"
-            :key="i"
-            nuxt
-            :to="info.to"
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="info.title" />
-              <v-list-item-subtitle v-text="info.value" />
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-col>
-    </v-row>
+    <v-card-text>
+      <v-row>
+        <v-col :cols="3">
+          <v-img :src="item.data.image" />
+        </v-col>
+        <v-col :cols="9">
+          <h1>{{ item.data.name }}</h1>
+          <p>{{ item.data.description }}</p>
+          <v-list two-line>
+            <v-list-item
+              v-for="(info, i) in informations"
+              :key="i"
+              nuxt
+              :to="info.to"
+            >
+              <v-list-item-content>
+                <v-list-item-title v-text="info.title" />
+                <v-list-item-subtitle v-text="info.value" />
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn @click="transfer" color="primary">Transfer</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
@@ -55,6 +61,20 @@ export default {
         },
         { title: 'Owner', value: this.item.owner }
       ]
+    }
+  },
+  methods: {
+    ...mapActions({
+      transferItem: 'store/transferItem'
+    }),
+    async transfer() {
+      const web3provider = window.web3.currentProvider
+      await this.transferItem({
+        web3provider,
+        store: this.store.address,
+        id: this.item.id,
+        to: prompt('Which address?')
+      })
     }
   },
   fetch: async ({ store, params }) => {

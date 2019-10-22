@@ -109,5 +109,11 @@ export const actions = {
       id: tokenID
     })
     return tokenID
+  },
+  transferItem: async ({ dispatch }, { store, web3provider, id, to }) => {
+    const contract = getContract(web3provider, store, true)
+    const [from] = await contract.provider.listAccounts()
+    await contract.transferFrom(from, to, id)
+    await dispatch('fetchItem', { web3provider, store, id })
   }
 }

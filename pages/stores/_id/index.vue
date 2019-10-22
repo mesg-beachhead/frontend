@@ -18,6 +18,19 @@
         </template>
       </v-data-table>
     </v-card>
+    <v-btn
+      class="mx-2"
+      fab
+      dark
+      fixed
+      right
+      bottom
+      nuxt
+      :to="`/stores/${storeId}/add`"
+      color="red"
+    >
+      <v-icon dark>mdi-plus</v-icon>
+    </v-btn>
   </v-container>
 </template>
 

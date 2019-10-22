@@ -2,16 +2,13 @@
   <v-container>
     <v-card>
       <v-data-table :headers="headers" :items="items">
-        <template v-slot:item.id="{ value }">
-          <nuxt-link :to="`/stores/${storeId}/${value}`">
-            {{ value }}
-          </nuxt-link>
-        </template>
         <template v-slot:item.name="{ item }">
-          <v-avatar tile class="mr-2">
-            <v-img :src="item.data.image" />
-          </v-avatar>
-          {{ item.data.name }}
+          <nuxt-link :to="`/stores/${storeId}/${item.id}`">
+            <v-avatar tile class="mr-2">
+              <v-img :src="item.data.image" />
+            </v-avatar>
+            {{ item.data.name }}
+          </nuxt-link>
         </template>
         <template v-slot:item.description="{ item }">
           {{ item.data.description }}
@@ -44,7 +41,6 @@ export default {
     }),
     headers() {
       return [
-        { text: 'id', value: 'id' },
         { text: 'name', value: 'name' },
         { text: 'description', value: 'description' },
         { text: 'owner', value: 'owner' }

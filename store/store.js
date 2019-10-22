@@ -5,6 +5,11 @@ const abi = require('./abi/erc721.json')
 const client = ipfs('localhost', '5001', { protocol: 'http' })
 const ipfsPath = (hash) => `http://localhost:8080/ipfs/${hash}`
 
+const getContract = (web3provider, address) => {
+  const provider = new providers.Web3Provider(web3provider)
+  return new Contract(address, abi, provider) // .connect(provider.getSigner(0))
+}
+
 export const state = () => ({
   list: {},
   addresses: [],
@@ -27,13 +32,11 @@ export const mutations = {
 
 export const actions = {
   add: async ({ commit }, { address, web3provider }) => {
-    const provider = new providers.Web3Provider(web3provider)
-    const contract = new Contract(address, abi, provider)
+    const contract = getContract(web3provider, address)
     if (await contract.paused()) {
       throw new Error('this contract is paused')
     }
     const store = {
-      contract,
       address,
       name: await contract.name(),
       symbol: await contract.symbol(),
@@ -43,8 +46,12 @@ export const actions = {
     commit('insert', store)
     return store
   },
-  fetchItems: async ({ getters, dispatch }, { store, page, perPage }) => {
-    const { contract, totalSupply } = getters.list[store]
+  fetchItems: async (
+    { getters, dispatch },
+    { store, web3provider, page, perPage }
+  ) => {
+    const { totalSupply, address } = getters.list[store]
+    const contract = getContract(web3provider, address)
     const from = Math.min((page - 1) * perPage, totalSupply)
     const to = Math.min(from + perPage, totalSupply)
     let items = []
@@ -53,6 +60,7 @@ export const actions = {
       items = [
         ...items,
         await dispatch('fetchItem', {
+          web3provider,
           store,
           id: id.toNumber()
         })
@@ -60,8 +68,8 @@ export const actions = {
     }
     return items
   },
-  fetchItem: async ({ commit, getters }, { store, id }) => {
-    const { contract } = getters.list[store]
+  fetchItem: async ({ commit }, { store, web3provider, id }) => {
+    const contract = getContract(web3provider, store)
     const tokenURI = await contract.tokenURI(id)
     const item = {
       id,
@@ -73,30 +81,29 @@ export const actions = {
     commit('insertItem', item)
     return item
   },
-  createItem: async ({ dispatch }, data) => {
-    if (data.image) {
-      const [image] = await client.add(await data.image.arrayBuffer(), {
+  createItem: async ({ dispatch }, { web3provider, item }) => {
+    if (item.image) {
+      const [image] = await client.add(await item.image.arrayBuffer(), {
         pin: true
       })
-      data.image = ipfsPath(image.hash)
+      item.image = ipfsPath(image.hash)
     }
     const [{ hash }] = await client.add(
       ipfs.Buffer.from(
         JSON.stringify({
-          ...data,
-          store: data.store.address
+          ...item,
+          store: item.store.address
         })
       ),
       { pin: true }
     )
-    const contract = data.store.contract.connect(
-      data.store.contract.provider.getSigner(0)
-    )
+
+    const contract = getContract(web3provider, item.store.address)
     const tokenID = parseInt(await contract.totalSupply()) + 1
     const [to] = await contract.provider.listAccounts()
     await contract.mintWithTokenURI(to, tokenID, ipfsPath(hash))
     await dispatch('fetchItem', {
-      store: data.store.address,
+      store: item.store.address,
       id: tokenID
     })
     return tokenID

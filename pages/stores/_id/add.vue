@@ -52,11 +52,15 @@ export default {
       this.image = e.srcElement.files[0]
     },
     async submit() {
+      const web3provider = window.web3.currentProvider
       const token = await this.$store.dispatch('store/createItem', {
-        store: this.store,
-        name: this.name,
-        description: this.description,
-        image: this.image
+        item: {
+          store: this.store,
+          name: this.name,
+          description: this.description,
+          image: this.image
+        },
+        web3provider
       })
       this.$nuxt.$router.push(`/stores/${this.store.address}/${token}`)
     }

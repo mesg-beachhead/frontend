@@ -60,6 +60,7 @@ export default {
     const address = params.id
     await store.dispatch('store/add', { address, web3provider })
     await store.dispatch('store/fetchItems', {
+      web3provider,
       store: address,
       page: 1,
       perPage

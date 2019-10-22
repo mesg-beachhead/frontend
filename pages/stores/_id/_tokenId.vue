@@ -62,6 +62,7 @@ export default {
     const address = params.id
     await store.dispatch('store/add', { address, web3provider })
     await store.dispatch('store/fetchItem', {
+      web3provider,
       store: params.id,
       id: params.tokenId
     })

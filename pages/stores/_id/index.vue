@@ -1,10 +1,23 @@
 <template>
   <v-container>
-    <ul>
-      <li v-for="item in items" :key="item.id">
-        {{ item }}
-      </li>
-    </ul>
+    <v-card>
+      <v-data-table :headers="headers" :items="items">
+        <template v-slot:item.id="{ value }">
+          <nuxt-link :to="`/stores/${storeId}/${value}`">
+            {{ value }}
+          </nuxt-link>
+        </template>
+        <template v-slot:item.name="{ item }">
+          <v-avatar tile class="mr-2">
+            <v-img :src="item.data.image" />
+          </v-avatar>
+          {{ item.data.name }}
+        </template>
+        <template v-slot:item.description="{ item }">
+          {{ item.data.description }}
+        </template>
+      </v-data-table>
+    </v-card>
   </v-container>
 </template>
 
@@ -14,14 +27,18 @@ const perPage = 20
 export default {
   computed: {
     ...mapGetters({
-      stores: 'store/list',
       storesItems: 'store/items'
     }),
+    headers() {
+      return [
+        { text: 'id', value: 'id' },
+        { text: 'name', value: 'name' },
+        { text: 'description', value: 'description' },
+        { text: 'owner', value: 'owner' }
+      ]
+    },
     storeId() {
       return this.$route.params.id
-    },
-    store() {
-      return this.stores[this.storeId]
     },
     items() {
       return Object.keys(this.storesItems)

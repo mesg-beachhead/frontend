@@ -24,15 +24,16 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['element-ui/lib/theme-chalk/index.css'],
+  css: [],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/element-ui'],
+  plugins: [],
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    '@nuxtjs/vuetify',
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
@@ -51,5 +52,8 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  vuetify: {
+    /* module options */
   }
 }

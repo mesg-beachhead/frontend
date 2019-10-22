@@ -1,7 +1,7 @@
 <template>
-  <el-button type="primary" @click="purchase(offer)"
-    >Purchase for {{ priceLabel }}</el-button
-  >
+  <v-btn type="primary" @click="purchase(offer)">
+    Purchase for {{ priceLabel }}
+  </v-btn>
 </template>
 
 <script>

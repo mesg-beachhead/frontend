@@ -1,46 +1,20 @@
 <template>
   <div>
-    <el-alert
+    <v-alert
       v-if="!allowed"
       title="Invalid account"
       type="error"
       description="Please switch to an account with the authotization to create a new offer."
       show-icon
     />
-    <el-form
-      v-loading="submitting"
-      :model="item"
-      label-position="left"
-      label-width="100px"
-    >
-      <el-form-item label="Name">
-        <el-input v-model="item.name" />
-      </el-form-item>
-      <el-form-item label="Description">
-        <el-input v-model="item.description" />
-      </el-form-item>
-      <el-form-item label="Image">
-        <input type="file" @change="(e) => fileChanged(e, 'image')" />
-      </el-form-item>
-      <el-form-item label="Price">
-        <el-col :span="20">
-          <el-input v-model="offer.price" type="number" />
-        </el-col>
-        <el-col :span="4">
-          <el-select v-model="offer.currency">
-            <el-option
-              v-for="(key, value) in currencies"
-              :key="key"
-              :label="key"
-              :value="value"
-            ></el-option>
-          </el-select>
-        </el-col>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submit">Create Offer</el-button>
-      </el-form-item>
-    </el-form>
+    <v-form v-model="item">
+      <v-text-field v-model="item.name" label="Name" />
+      <v-text-field v-model="item.description" label="Description" />
+      <input type="file" @change="(e) => fileChanged(e, 'image')" />
+      <v-text-field v-model="offer.price" label="Price" type="number" />
+      <v-select v-model="offer.currency" :items="currencies" />
+      <v-btn @click="submit">Create Offer</v-btn>
+    </v-form>
   </div>
 </template>
 

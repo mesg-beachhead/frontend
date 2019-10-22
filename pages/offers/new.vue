@@ -1,10 +1,12 @@
 <template>
-  <el-card>
-    <div slot="header" class="clearfix">
-      <span>Create a new item with an offer</span>
-    </div>
-    <OfferForm />
-  </el-card>
+  <v-card>
+    <v-card-title>
+      Create a new item with an offer
+    </v-card-title>
+    <v-card-text>
+      <OfferForm />
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

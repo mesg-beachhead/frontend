@@ -1,11 +1,11 @@
 <template>
-  <el-container>
+  <v-container>
     <ul>
       <li v-for="item in items" :key="item.id">
         {{ item }}
       </li>
     </ul>
-  </el-container>
+  </v-container>
 </template>
 
 <script>

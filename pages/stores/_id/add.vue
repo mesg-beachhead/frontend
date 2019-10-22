@@ -1,10 +1,24 @@
 <template>
-  <form>
-    <input v-model="name" placeholder="name" />
-    <textarea v-model="description" placeholder="description" />
-    <input placeholder="file" type="file" @change="updateFile" />
-    <input type="submit" value="submit" @click.prevent.stop="submit" />
-  </form>
+  <v-card>
+    <v-card-title>
+      Create a new item
+    </v-card-title>
+    <v-divider />
+    <v-form @submit.prevent="submit">
+      <v-card-text>
+        <v-text-field v-model="name" label="name" />
+        <v-textarea v-model="description" label="description" />
+        <v-file-input v-model="image" placeholder="file" type="file" />
+      </v-card-text>
+      <v-divider />
+      <v-card-actions>
+        <v-spacer />
+        <v-btn color="primary" type="submit">
+          Submit
+        </v-btn>
+      </v-card-actions>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
@@ -28,6 +42,11 @@ export default {
       return this.stores[this.storeId]
     }
   },
+  fetch: async ({ store, params }) => {
+    const web3provider = window.web3.currentProvider
+    const address = params.id
+    await store.dispatch('store/add', { address, web3provider })
+  },
   methods: {
     updateFile(e) {
       this.image = e.srcElement.files[0]
@@ -41,11 +60,6 @@ export default {
       })
       this.$nuxt.$router.push(`/stores/${this.store.address}/${token}`)
     }
-  },
-  fetch: async ({ store, params }) => {
-    const web3provider = window.web3.currentProvider
-    const address = params.id
-    await store.dispatch('store/add', { address, web3provider })
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <el-container style="max-width: 1024px; margin: auto;">
-    <el-main>
+  <v-app>
+    <v-container>
       <nuxt />
-    </el-main>
-  </el-container>
+    </v-container>
+  </v-app>
 </template>

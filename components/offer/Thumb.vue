@@ -1,12 +1,15 @@
 <template>
   <nuxt-link :to="`/offers/${offer.id}`" class="item-thumb">
-    <el-card shadow="hover" :header-style="{ padding: 0 }">
-      <template v-slot:header>
-        <el-image :src="offer.item.image" fit="fill" />
-      </template>
-      <h4>{{ offer.item.name }}</h4>
-      <p>{{ offer.item.description }}</p>
-    </el-card>
+    <v-card>
+      <v-img
+        class="white--text align-end"
+        height="200px"
+        :src="offer.item.image"
+      >
+        <v-card-title>{{ offer.item.name }}</v-card-title>
+      </v-img>
+      <v-card-text v-html="offer.item.description" />
+    </v-card>
   </nuxt-link>
 </template>
 

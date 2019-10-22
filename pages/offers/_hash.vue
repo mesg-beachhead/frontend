@@ -1,23 +1,25 @@
 <template>
-  <el-container>
-    <el-main>
-      <img :src="offer.item.image" />
-      <trait :offer="offer" type="images" />
-      <h2>Description</h2>
-      <p>{{ offer.item.description }}</p>
-      <h3>Owner</h3>
-      <p>{{ offer.item.owner }}</p>
-      <h3>Seller</h3>
-      <p>{{ offer.seller }}</p>
-    </el-main>
-    <el-aside width="300px">
-      <h1>{{ offer.item.name }}</h1>
-      Price: {{ offer.price }} {{ currency }}
-      <trait :offer="offer" type="dimension" />
-      <trait :offer="offer" type="location" />
-      <purchase-button :offer="offer" />
-    </el-aside>
-  </el-container>
+  <v-container>
+    <v-row>
+      <v-col cols="9">
+        <img :src="offer.item.image" />
+        <trait :offer="offer" type="images" />
+        <h2>Description</h2>
+        <p>{{ offer.item.description }}</p>
+        <h3>Owner</h3>
+        <p>{{ offer.item.owner }}</p>
+        <h3>Seller</h3>
+        <p>{{ offer.seller }}</p>
+      </v-col>
+      <v-col cols="3">
+        <h1>{{ offer.item.name }}</h1>
+        Price: {{ offer.price }} {{ currency }}
+        <trait :offer="offer" type="dimension" />
+        <trait :offer="offer" type="location" />
+        <purchase-button :offer="offer" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

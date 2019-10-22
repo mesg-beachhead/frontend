@@ -5,9 +5,10 @@ const abi = require('./abi/erc721.json')
 const client = ipfs('localhost', '5001', { protocol: 'http' })
 const ipfsPath = (hash) => `http://localhost:8080/ipfs/${hash}`
 
-const getContract = (web3provider, address) => {
+const getContract = (web3provider, address, connectSigner = false) => {
   const provider = new providers.Web3Provider(web3provider)
-  return new Contract(address, abi, provider) // .connect(provider.getSigner(0))
+  const contract = new Contract(address, abi, provider)
+  return connectSigner ? contract.connect(provider.getSigner(0)) : contract
 }
 
 export const state = () => ({
@@ -98,11 +99,12 @@ export const actions = {
       { pin: true }
     )
 
-    const contract = getContract(web3provider, item.store.address)
+    const contract = getContract(web3provider, item.store.address, true)
     const tokenID = parseInt(await contract.totalSupply()) + 1
     const [to] = await contract.provider.listAccounts()
     await contract.mintWithTokenURI(to, tokenID, ipfsPath(hash))
     await dispatch('fetchItem', {
+      web3provider,
       store: item.store.address,
       id: tokenID
     })

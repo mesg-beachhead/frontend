@@ -5,35 +5,38 @@ const abi = require('./abi/erc721.json')
 const client = ipfs('localhost', '5001', { protocol: 'http' })
 const ipfsPath = (hash) => `http://localhost:8080/ipfs/${hash}`
 
-const getContract = (web3provider, address, connectSigner = false) => {
-  const provider = new providers.Web3Provider(web3provider)
-  const contract = new Contract(address, abi, provider)
-  return connectSigner ? contract.connect(provider.getSigner(0)) : contract
-}
-
 export const state = () => ({
   list: {},
-  addresses: [],
-  items: {}
+  addresses: []
 })
 
 export const getters = {
   list: (state) => state.list,
-  addresses: (state) => state.addresses,
-  items: (state) => state.items
+  addresses: (state) => state.addresses
 }
 
 export const mutations = {
   insert: (state, store) => {
-    state.addresses = [...state.addresses, store.address]
     state.list[store.address] = store
+    if (!state.addresses.find((x) => x === store.address)) {
+      state.addresses = [...state.addresses, store.address]
+    }
   },
-  insertItem: (state, item) => (state.items[`${item.store}-${item.id}`] = item)
+  insertItem: (state, item) => {
+    state.list[item.store].items = {
+      ...(state.list[item.store].items || {}),
+      [item.id]: item
+    }
+  }
 }
 
 export const actions = {
-  add: async ({ commit }, { address, web3provider }) => {
-    const contract = getContract(web3provider, address)
+  add: async ({ commit, getters }, { address, web3provider }) => {
+    if (getters.list[address]) {
+      return getters.list[address]
+    }
+    const provider = new providers.Web3Provider(web3provider)
+    const contract = new Contract(address, abi, provider)
     if (await contract.paused()) {
       throw new Error('this contract is paused')
     }
@@ -47,12 +50,13 @@ export const actions = {
     commit('insert', store)
     return store
   },
-  fetchItems: async (
-    { getters, dispatch },
-    { store, web3provider, page, perPage }
-  ) => {
-    const { totalSupply, address } = getters.list[store]
-    const contract = getContract(web3provider, address)
+  fetchItems: async ({ dispatch }, { store, web3provider, page, perPage }) => {
+    const { totalSupply, address } = await dispatch('add', {
+      address: store,
+      web3provider
+    })
+    const provider = new providers.Web3Provider(web3provider)
+    const contract = new Contract(address, abi, provider)
     const from = Math.min((page - 1) * perPage, totalSupply)
     const to = Math.min(from + perPage, totalSupply)
     let items = []
@@ -69,8 +73,16 @@ export const actions = {
     }
     return items
   },
-  fetchItem: async ({ commit }, { store, web3provider, id }) => {
-    const contract = getContract(web3provider, store)
+  fetchItem: async (
+    { dispatch, commit, getters },
+    { store, web3provider, id }
+  ) => {
+    if (((getters.list[store] || {}).items || {})[id]) {
+      return getters.list[store].items[id]
+    }
+    await dispatch('add', { address: store, web3provider })
+    const provider = new providers.Web3Provider(web3provider)
+    const contract = new Contract(store, abi, provider)
     const tokenURI = await contract.tokenURI(id)
     const item = {
       id,
@@ -99,7 +111,10 @@ export const actions = {
       { pin: true }
     )
 
-    const contract = getContract(web3provider, item.store.address, true)
+    const provider = new providers.Web3Provider(web3provider)
+    const contract = new Contract(item.store.address, abi, provider).connect(
+      provider.getSigner(0)
+    )
     const tokenID = parseInt(await contract.totalSupply()) + 1
     const [to] = await contract.provider.listAccounts()
     await contract.mintWithTokenURI(to, tokenID, ipfsPath(hash))
@@ -111,7 +126,10 @@ export const actions = {
     return tokenID
   },
   transferItem: async ({ dispatch }, { store, web3provider, id, to }) => {
-    const contract = getContract(web3provider, store, true)
+    const provider = new providers.Web3Provider(web3provider)
+    const contract = new Contract(store, abi, provider).connect(
+      provider.getSigner(0)
+    )
     const [from] = await contract.provider.listAccounts()
     await contract.transferFrom(from, to, id)
     await dispatch('fetchItem', { web3provider, store, id })

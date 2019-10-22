@@ -3,7 +3,7 @@
     <v-card>
       <v-data-table :headers="headers" :items="items">
         <template v-slot:item.name="{ item }">
-          <nuxt-link :to="`/stores/${storeId}/${item.id}`">
+          <nuxt-link :to="`/stores/${store.address}/${item.id}`">
             <v-avatar tile class="mr-2">
               <v-img :src="item.data.image" />
             </v-avatar>
@@ -23,7 +23,7 @@
       right
       bottom
       nuxt
-      :to="`/stores/${storeId}/add`"
+      :to="`/stores/${store.address}/add`"
       color="red"
     >
       <v-icon dark>mdi-plus</v-icon>
@@ -37,7 +37,7 @@ const perPage = 20
 export default {
   computed: {
     ...mapGetters({
-      storesItems: 'store/items'
+      stores: 'store/list'
     }),
     headers() {
       return [
@@ -46,13 +46,11 @@ export default {
         { text: 'owner', value: 'owner' }
       ]
     },
-    storeId() {
-      return this.$route.params.id
+    store() {
+      return this.stores[this.$route.params.id]
     },
     items() {
-      return Object.keys(this.storesItems)
-        .filter((id) => this.storesItems[id].store === this.storeId)
-        .map((id) => this.storesItems[id])
+      return Object.keys(this.store.items).map((id) => this.store.items[id])
     }
   },
   fetch: async ({ store, params }) => {

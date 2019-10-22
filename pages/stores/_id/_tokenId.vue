@@ -26,7 +26,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn @click="transfer" color="primary">Transfer</v-btn>
+      <v-btn color="primary" @click="transfer">Transfer</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -36,21 +36,16 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      stores: 'store/list',
-      items: 'store/items'
+      stores: 'store/list'
     }),
     store() {
       return this.stores[this.$route.params.id]
     },
-    itemId() {
-      return Object.keys(this.items).find(
-        (x) =>
-          this.items[x].store === this.$route.params.id &&
-          this.items[x].id === this.$route.params.tokenId
-      )
+    items() {
+      return this.store.items
     },
     item() {
-      return this.items[this.itemId]
+      return this.items[this.$route.params.tokenId]
     },
     informations() {
       return [
@@ -62,6 +57,16 @@ export default {
         { title: 'Owner', value: this.item.owner }
       ]
     }
+  },
+  fetch: async ({ store, params }) => {
+    const web3provider = window.web3.currentProvider
+    const address = params.id
+    await store.dispatch('store/add', { address, web3provider })
+    await store.dispatch('store/fetchItem', {
+      web3provider,
+      store: params.id,
+      id: params.tokenId
+    })
   },
   methods: {
     ...mapActions({
@@ -76,16 +81,6 @@ export default {
         to: prompt('Which address?')
       })
     }
-  },
-  fetch: async ({ store, params }) => {
-    const web3provider = window.web3.currentProvider
-    const address = params.id
-    await store.dispatch('store/add', { address, web3provider })
-    await store.dispatch('store/fetchItem', {
-      web3provider,
-      store: params.id,
-      id: params.tokenId
-    })
   }
 }
 </script>

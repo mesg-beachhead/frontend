@@ -1,7 +1,28 @@
 <template>
-  <div>
-    {{ item }}
-  </div>
+  <v-card>
+    <v-row>
+      <v-col :cols="3">
+        <v-img :src="item.data.image" />
+      </v-col>
+      <v-col :cols="9">
+        <h1>{{ item.data.name }}</h1>
+        <p>{{ item.data.description }}</p>
+        <v-list two-line>
+          <v-list-item
+            v-for="(info, i) in informations"
+            :key="i"
+            nuxt
+            :to="info.to"
+          >
+            <v-list-item-content>
+              <v-list-item-title v-text="info.title" />
+              <v-list-item-subtitle v-text="info.value" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col>
+    </v-row>
+  </v-card>
 </template>
 
 <script>
@@ -24,6 +45,16 @@ export default {
     },
     item() {
       return this.items[this.itemId]
+    },
+    informations() {
+      return [
+        {
+          title: 'Store',
+          value: this.store.name,
+          to: `/stores/${this.store.address}`
+        },
+        { title: 'Owner', value: this.item.owner }
+      ]
     }
   },
   fetch: async ({ store, params }) => {

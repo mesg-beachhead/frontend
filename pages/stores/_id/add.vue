@@ -48,9 +48,6 @@ export default {
     await store.dispatch('store/add', { address, web3provider })
   },
   methods: {
-    updateFile(e) {
-      this.image = e.srcElement.files[0]
-    },
     async submit() {
       const web3provider = window.web3.currentProvider
       const token = await this.$store.dispatch('store/createItem', {

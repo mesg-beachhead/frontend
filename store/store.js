@@ -17,15 +17,27 @@ export const getters = {
 
 export const mutations = {
   insert: (state, store) => {
-    state.list[store.address] = store
+    state.list = {
+      ...state.list,
+      [store.address]: {
+        ...state.list[store.address],
+        ...store
+      }
+    }
     if (!state.addresses.find((x) => x === store.address)) {
       state.addresses = [...state.addresses, store.address]
     }
   },
   insertItem: (state, item) => {
-    state.list[item.store].items = {
-      ...(state.list[item.store].items || {}),
-      [item.id]: item
+    state.list = {
+      ...state.list,
+      [item.store]: {
+        ...state.list[item.store],
+        items: {
+          ...state.list[item.store].items,
+          [item.id]: item
+        }
+      }
     }
   }
 }
@@ -75,9 +87,9 @@ export const actions = {
   },
   fetchItem: async (
     { dispatch, commit, getters },
-    { store, web3provider, id }
+    { store, web3provider, id, force }
   ) => {
-    if (((getters.list[store] || {}).items || {})[id]) {
+    if (((getters.list[store] || {}).items || {})[id] && !force) {
       return getters.list[store].items[id]
     }
     await dispatch('add', { address: store, web3provider })
@@ -121,7 +133,8 @@ export const actions = {
     await dispatch('fetchItem', {
       web3provider,
       store: item.store.address,
-      id: tokenID
+      id: tokenID,
+      force: true
     })
     return tokenID
   },
@@ -132,6 +145,6 @@ export const actions = {
     )
     const [from] = await contract.provider.listAccounts()
     await contract.transferFrom(from, to, id)
-    await dispatch('fetchItem', { web3provider, store, id })
+    await dispatch('fetchItem', { web3provider, store, id, force: true })
   }
 }

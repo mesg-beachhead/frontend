@@ -7,7 +7,7 @@
     <v-form @submit.prevent="submit">
       <v-card-text>
         <v-select v-model="store" label="Store" :items="stores" />
-        <v-select v-model="item" label="Item" :items="items" />
+        <v-select v-model.number="item" label="Item" :items="items" />
         <v-select v-model="currency" label="Currency" :items="currencies" />
         <v-text-field v-model.number="price" label="Price" />
       </v-card-text>
@@ -56,15 +56,6 @@ export default {
       ]
     }
   },
-  fetch: async ({ store, params }) => {
-    const stores = ['0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec']
-    const web3provider = window.web3.currentProvider
-    await Promise.all(
-      stores.map((address) =>
-        store.dispatch('store/add', { address, web3provider })
-      )
-    )
-  },
   watch: {
     async store(store) {
       await this.fetchItems({
@@ -74,6 +65,15 @@ export default {
         perPage: 100
       })
     }
+  },
+  fetch: async ({ store, params }) => {
+    const stores = ['0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec']
+    const web3provider = window.web3.currentProvider
+    await Promise.all(
+      stores.map((address) =>
+        store.dispatch('store/add', { address, web3provider })
+      )
+    )
   },
   methods: {
     ...mapActions({
@@ -91,7 +91,6 @@ export default {
           price: this.price
         }
       })
-      debugger
       this.$nuxt.$router.push(`/offers/${offer.id}`)
     }
   }

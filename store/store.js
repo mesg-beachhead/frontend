@@ -129,7 +129,8 @@ export const actions = {
     )
     const tokenID = parseInt(await contract.totalSupply()) + 1
     const [to] = await contract.provider.listAccounts()
-    await contract.mintWithTokenURI(to, tokenID, ipfsPath(hash))
+    const tx = await contract.mintWithTokenURI(to, tokenID, ipfsPath(hash))
+    await tx.wait()
     await dispatch('fetchItem', {
       web3provider,
       store: item.store.address,
@@ -144,7 +145,15 @@ export const actions = {
       provider.getSigner(0)
     )
     const [from] = await contract.provider.listAccounts()
-    await contract.transferFrom(from, to, id)
+    const tx = await contract.transferFrom(from, to, id)
+    await tx.wait()
     await dispatch('fetchItem', { web3provider, store, id, force: true })
+  },
+  approveItem: async (_, { store, web3provider, id, to }) => {
+    const provider = new providers.Web3Provider(web3provider)
+    const contract = new Contract(store, abi, provider).connect(
+      provider.getSigner(0)
+    )
+    await contract.approve(to, id)
   }
 }

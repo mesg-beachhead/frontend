@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card v-if="item">
     <v-card-text>
       <v-row>
         <v-col :cols="3">

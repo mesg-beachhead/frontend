@@ -36,7 +36,7 @@ export default {
     }
   },
   fetch: async ({ store }) => {
-    const stores = ['0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec']
+    const stores = [process.env.BHGUNS]
     const web3provider = window.web3.currentProvider
     await Promise.all(
       stores.map((address) =>

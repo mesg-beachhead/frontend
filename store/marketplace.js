@@ -1,7 +1,7 @@
 import { Contract, providers } from 'ethers'
 
 const abi = require('./abi/marketplace.json')
-const address = '0x4339316e04CFfB5961D1c41fEF8E44bfA2A7fBd1'
+const address = process.env.MARKETPLACE
 
 export const state = () => ({
   list: []

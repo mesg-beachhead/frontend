@@ -37,6 +37,11 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
+  env: {
+    BHD: '0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66',
+    BHGUNS: '0xA57B8a5584442B467b4689F1144D269d096A3daF',
+    MARKETPLACE: '0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe'
+  },
   /*
    ** Nuxt.js modules
    */

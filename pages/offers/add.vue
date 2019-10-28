@@ -51,9 +51,7 @@ export default {
       }))
     },
     currencies() {
-      return [
-        { value: '0xA57B8a5584442B467b4689F1144D269d096A3daF', text: 'BHD' }
-      ]
+      return [{ value: process.env.BHD, text: 'BHD' }]
     }
   },
   watch: {
@@ -67,7 +65,7 @@ export default {
     }
   },
   fetch: async ({ store, params }) => {
-    const stores = ['0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec']
+    const stores = [process.env.BHGUNS]
     const web3provider = window.web3.currentProvider
     await Promise.all(
       stores.map((address) =>

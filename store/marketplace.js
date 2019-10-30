@@ -14,7 +14,7 @@ export const getters = {
 export const mutations = {
   insert: (state, offer) => {
     state.list = [...state.list.filter((x) => x.id !== offer.id), offer].sort(
-      (a, b) => a.createdAt.localCompare(b.createdAt)
+      (a, b) => b.createdAt - a.createdAt
     )
   }
 }
@@ -42,7 +42,23 @@ export const actions = {
   fetch: async ({ commit }, { web3provider, id }) => {
     const provider = new providers.Web3Provider(web3provider)
     const contract = new Contract(address, abi, provider)
-    const offer = await contract.offers(id)
+    const _offer = await contract.offers(id)
+    const offer = {
+      id: _offer.id.toHexString(),
+      active: _offer.active,
+      buyer: _offer.buyer,
+      createdAt: _offer.createdAt.isZero()
+        ? null
+        : new Date(_offer.createdAt.toNumber() * 1000),
+      currency: _offer.currency,
+      price: _offer.price.toNumber(),
+      purchasedAt: _offer.purchasedAt.isZero()
+        ? null
+        : new Date(_offer.purchasedAt.toNumber() * 1000),
+      seller: _offer.seller,
+      store: _offer.store,
+      tokenId: _offer.tokenId.toNumber()
+    }
     commit('insert', offer)
     return offer
   },
